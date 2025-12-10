@@ -20,7 +20,7 @@ class main implements renderable, templatable {
         if(isset($this->data->haserror) && $this->data->haserror) {
             return $this->data;
         }
-
+        $notfoundmessage = "No courses available to display";
         $categories = $this->get_categories_for_user();
         $this->data->search = $this->format_search_for_template($categories);
 
@@ -30,28 +30,43 @@ class main implements renderable, templatable {
         $numresults = 0;
 
         if(isset($this->data->ismain) && $this->data->ismain) {
-            $this->data->heading = $this->data->category->name;
+            $categoryname = $this->data->category->name;
+            $notfoundmessage = "No courses found for category '$categoryname'";
+
+            $this->data->heading = $categoryname;
             $this->data->description = $this->data->category->description;
 
             $numresults = $this->data->category->coursecount;
-            $courseids = $this->data->category->get_courses(['idonly'=>true, 'limit' => $limit, 'offset'=>$offset]);
-            $this->data->courses = $this->get_courses_for_display($courseids);
+            if($numresults) {
+                $courseids = $this->data->category->get_courses(['idonly'=>true, 'limit' => $limit, 'offset'=>$offset]);
+                $this->data->courses = $this->get_courses_for_display($courseids);
+            }
         }
         elseif(isset($this->data->query)) {
             $query = $this->data->query;
+            $notfoundmessage = "No courses found for search '$query'";
+
             $courseids = \core_course_category::search_courses(['search'=>$query], ['idonly'=>true, 'limit' => $limit, 'offset'=>$offset]);
             $numresults = \core_course_category::search_courses_count(['search'=>$query]);
-
-            $this->data->heading = "$numresults result" . ($numresults > 1 ? 's' : '') . " for '$query'";
-            $this->data->courses = $this->get_courses_for_display($courseids, true);
-            $this->data->ismain = true;
+            if($numresults) {
+                $this->data->heading = "$numresults result" . ($numresults > 1 ? 's' : '') . " for '$query'";
+                $this->data->courses = $this->get_courses_for_display($courseids, true);
+                $this->data->ismain = true;
+            }
         }
         else {
-            $this->data->categories = $this->get_categories_for_page($categories);
+            $pageresults = $this->get_categories_for_page($categories);
+            $numresults = $pageresults['numresults'];
+            $this->data->categories = $pageresults['categories'];
         }
                 
         if($numresults > $limit) {
             $this->get_pagination_params($page, $limit, $numresults);
+        }
+        elseif($numresults == 0) {
+            $this->data->notfound = true;
+            $this->data->notfoundmessage = $notfoundmessage;
+            $this->data->notfoundimg = $output->image_url('not_found', 'local_catalog');
         }
         
         return $this->data;
@@ -119,7 +134,7 @@ class main implements renderable, templatable {
 
     private function get_categories_for_page(array $categories) {
         $pagecategories = [];
-
+        $numresults = 0;
         foreach ($categories as $category) {
             if (\core_course_category::can_view_category($category)) {
                 $cat = new stdClass();
@@ -128,13 +143,15 @@ class main implements renderable, templatable {
                 $cat->description = $category->description;
                 $cat->coursecount = $category->coursecount > 3 ? $category->coursecount : 0;
                 $cat->courses = $this->get_courses_for_display($category->get_courses([ 'limit' => 3, 'idonly' => true ]));
-                    
+                
+                $numresults += $category->coursecount;
+                
                 if(!empty($cat->courses)) {
                     $pagecategories[] = $cat;
                 }
             }
         }
-        return $pagecategories;
+        return ['categories'=> $pagecategories, 'numresults'=> $numresults];
     }
 
     private function get_courses_for_display(array $courseids, $hascategory = false) {
