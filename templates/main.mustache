@@ -1,0 +1,44 @@
+{{#search}}
+    {{> local_catalog/search}}
+{{/search}}
+<div class="centered-content catalog-page-container {{#haserror}}catalog-page-error {{/haserror}}px-3 px-lg-0 w-100 {{#ismain}}category-page{{/ismain}}">    
+    <div class="catalog-heading">
+        <h2 class="my-4 fw-bold">
+            {{#heading}}{{heading}}{{/heading}}
+            {{^heading}}{{#str}} catalogheading, local_catalog {{/str}}{{/heading}}
+        </h2>
+        {{#description}}
+            {{{description}}}
+        {{/description}}
+    </div>
+    {{#haserror}}
+        {{> local_catalog/error}}
+    {{/haserror}}
+    {{^haserror}}
+        <div class="d-flex flex-column{{#ismain}} catalog-list{{/ismain}}">
+            {{#ismain}}
+                {{#courses}}
+                    {{> local_catalog/course}}
+                {{/courses}}
+            {{/ismain}}
+            {{^ismain}}
+                {{#categories}}
+                    <div class="catalog-page-category">
+                        <h3>{{name}}</h3>
+                        {{{description}}}
+                        {{> local_catalog/category}}
+                    </div>
+                {{/categories}}
+            {{/ismain}}
+        </div>
+    {{/haserror}}
+</div>
+{{> local_catalog/pagination}}
+{{#js}}
+    (() => {
+        const elem = document.querySelector('#user-notifications');
+        const parent = document.querySelector('.catalog-page-container');
+        elem.classList.add('d-block');
+        parent.insertBefore(elem, parent.childNodes[0]);
+    })();
+{{/js}}

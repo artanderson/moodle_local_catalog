@@ -1,0 +1,15 @@
+<div data-rel="fatalerror" class="box py-3 errorbox alert alert-danger">
+    <p class="errormessage">
+        {{error.message}}
+    </p>
+    <p class="errorcode">
+        <a href="http://docs.moodle.org/500/en_us_wp/error/moodle/{{error.code}}" target="_blank" rel="noopener noreferrer">
+            More information about this error
+        </a>
+    </p>
+</div>
+<div class="continuebutton">
+    <form method="get" action="/local/catalog/index.php">
+        <button type="submit" class="btn btn-primary">Continue</button>
+    </form>
+</div>

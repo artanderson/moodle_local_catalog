@@ -1,0 +1,16 @@
+<div id="category-courses-{{uniqid}}" class="category-courses block-cards" data-region="category-courses" role="navigation">
+    <div class="container-fluid py-3 px-0">
+        <div class="card-grid mx-0 row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-gap-2" data-region="card-deck" role="list">
+            {{#courses}}
+                <div class="col d-flex px-0 mb-2">
+                    {{> local_catalog/card }}
+                </div>
+            {{/courses}}
+        </div>
+        {{#coursecount}}
+            <div class="w-100 text-right pt-2">
+                <a href="/local/catalog/index.php?categoryid={{id}}">See all {{coursecount}} courses</a>
+            </div>
+        {{/coursecount}}
+    </div>
+</div>

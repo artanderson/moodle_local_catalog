@@ -1,0 +1,30 @@
+<div class="catalog-search-wrapper d-flex w-100 m-0 px-3 align-items-center justify-content-center position-fixed">
+    <div class="catalog-search d-flex align-items-center position-relative">
+        {{#menu}}
+            {{< core/local/dropdown/dialog }}
+                {{$buttoncontent}}
+                    {{buttontext}}
+                    <span class="order-2">
+                        <i class="icon fa fa-caret-down fa-fw " aria-hidden="true"></i>
+                    </span>
+                {{/buttoncontent}}
+                {{$dialogcontent}}
+                    {{#categories}}
+                        <a 
+                            class="dropdown-item p-lg-2 py-1 px-2 w-100 d-lg-block align-content-center d-flex flex-row justify-content-between align-items-center text-truncate nowrap remove-icon"
+                            role="menuitem"
+                            href="/local/catalog/index.php?categoryid={{id}}"
+                            data-item-type="category"
+                        >
+                            {{name}}
+                        </a>
+                    {{/categories}}
+                {{/dialogcontent}}
+            {{/ core/local/dropdown/dialog }}
+        {{/menu}}
+        <div class="divider bg-secondary mx-2"></div>
+        {{#form}}
+            {{> core/search_input }}
+        {{/form}}
+    </div>
+</div>

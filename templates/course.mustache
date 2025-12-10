@@ -1,0 +1,24 @@
+<div class="catalog-course d-flex flex-nowrap py-4" data-region="catalog-item" data-courseid="{{id}}">
+    <div class="catalog-course-image position-relative">
+        <a href="{{viewurl}}" class="d-block w-100 h-100 rounded-3">
+            <img src="{{{courseimage}}}" alt="{{fullname}}" class="w-100 h-100 rounded-3">
+        </a>
+    </div>
+    <div class="catalog-course-body px-3 overflow-hidden w-100">
+        <div class="catalog-course-title d-block text-truncate" data-region="item-name">
+            <a href="{{viewurl}}" class="text-primary">{{fullname}}</a>
+        </div>
+        {{#hascategory}}
+            <div class="catalog-course-field catalog-course-category overflow-hidden py-2 my-2">
+                <span>
+                    <strong>Category:</strong> {{categoryname}}
+                </span>
+            </div>
+        {{/hascategory}}
+        <div class="catalog-course-field overflow-hidden pt-1">
+            <div class="catalog-course-field-value">
+                {{{summary}}}
+            </div>
+        </div>
+    </div>
+</div>
