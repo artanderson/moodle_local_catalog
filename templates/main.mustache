@@ -9,7 +9,6 @@
         <div class="catalog-heading">
             <h2 class="my-4 fw-bold">
                 {{#heading}}{{heading}}{{/heading}}
-                {{^heading}}{{#str}} catalogheading, local_catalog {{/str}}{{/heading}}
             </h2>
             {{#description}}
                 {{{description}}}
@@ -38,7 +37,9 @@
         {{/haserror}}
     {{/notfound}}
 </div>
-{{> local_catalog/pagination}}
+{{#ismain}}
+    {{> local_catalog/pagination}}
+{{/ismain}}
 {{#js}}
     (() => {
         const elem = document.querySelector('#user-notifications');

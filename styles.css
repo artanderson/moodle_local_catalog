@@ -148,6 +148,9 @@
             p {
                 margin-bottom: 0 !important;
             }
+            > *:not(p) { 
+                display: contents;
+            }
         }
     }
 
